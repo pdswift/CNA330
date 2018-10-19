@@ -19,7 +19,7 @@ def connect_to_sql():
 # Create the table structure
 def create_tables(cursor, table):
     ## Add your code here. Starter code below
-    cursor.execute('''CREATE TABLE IF NOT EXISTS tablename (id INT PRIMARY KEY); ''')
+    cursor.execute('''CREATE TABLE IF NOT EXISTS JOBS (id INT PRIMARY KEY, PostDate Date, Title TEXT, Location TEXT, Description TEXT, Company TEXT, Apply_info TEXT, Salary FLOAT, RawMessage TEXT );''')
     return
 
 # Query the database.
@@ -31,7 +31,7 @@ def query_sql(cursor, query):
 # Add a new job
 def add_new_job(cursor, jobdetails):
     ## Add your code here
-    query = "INSERT INTO"
+    query = "INSERT INTO JOBS (PostDate, Title, Location, Description, Company, Apply_info, Salary,RawMessage) values (jobdetais.created_at, jobdetais.title,jobdetais.location,jobdetais.description, jobdetais.Company, jobdetais.Apply_info, jobdetais.Salary)"
     return query_sql(cursor, query)
 
 # Check if new job
@@ -46,14 +46,22 @@ def delete_job(cursor, jobdetails):
     return query_sql(cursor, query)
 
 # Grab new jobs from a website
+
 def fetch_new_jobs(arg_dict):
+    sea = "seattle"
+    description = "description"
+    salary = "salary"
+    location = "location"
     # Code from https://github.com/RTCedu/CNA336/blob/master/Spring2018/Sql.py
-    query = "https://jobs.github.com/positions.json?" + "location=seattle" # Add arguments here
+    query = "https://jobs.github.com/positions.json"#?" + "location= " + sea + " & decription =" + location + salary #Add arguments here
     jsonpage = 0
+
     try:
         contents = urllib.request.urlopen(query)
         response = contents.read()
         jsonpage = json.loads(response)
+
+
     except:
         pass
     return jsonpage
@@ -66,11 +74,11 @@ def load_config_file(filename):
     file = 0
     file_contents = 0
     try:
-        file = open(filename, "r")
+        file = open('config.txt', "r")
         file_contents = file.read()
     except FileNotFoundError:
         print("File not found, it will be created.")
-        file = open(filename, "w")
+        file = open('config.txt', "w")
         file.write("")
         file.close()
 
@@ -96,12 +104,12 @@ def main():
     # Connect to SQL and get cursor
     conn = connect_to_sql()
     cursor = conn.cursor()
-    create_tables(cursor, "table")
+    create_tables(cursor, "JOBS")
     # Load text file and store arguments into dictionary
-    arg_dict = load_config_file(sys.argv[1])
+    arg_dict = load_config_file([1])
     while(1):
-        jobhunt(arg_dict)
-        time.sleep(3600); # Sleep for 1h
+       add_new_job(cursor,jobhunt(arg_dict))
+       time.sleep(3600) # Sleep for 1h
 
 if __name__ == '__main__':
     main()
