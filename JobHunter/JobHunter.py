@@ -31,7 +31,8 @@ def query_sql(cursor, query):
 # Add a new job
 def add_new_job(cursor, jobdetails):
     ## Add your code here
-    query = "INSERT INTO JOBS (PostDate, Title, Location, Description, Company, Apply_info, Salary,RawMessage) values (jobdetais.created_at, jobdetais.title,jobdetais.location,jobdetais.description, jobdetais.Company, jobdetais.Apply_info, jobdetais.Salary)"
+    query = "INSERT INTO JOBS (PostDate, Title, Location, Description, Company, Apply_info, Salary,RawMessage) values (%s,%s,%s,%s,$s,%s,%s,%s)"
+    data  =(jobdetails.created_at, jobdetails.title,jobdetails.location,jobdetails.description, jobdetails.Company, jobdetails.Apply_info, jobdetails.Salary,jobdetails)
     return query_sql(cursor, query)
 
 # Check if new job
