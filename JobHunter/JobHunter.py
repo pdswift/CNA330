@@ -19,7 +19,7 @@ def connect_to_sql():
 # Create the table structure
 def create_tables(cursor, table):
     ## Add your code here. Starter code below
-    cursor.execute('''CREATE TABLE IF NOT EXISTS JOBS (id INT PRIMARY KEY, PostDate Date, Title TEXT, Location TEXT, Description TEXT, Company TEXT, Apply_info TEXT, Salary FLOAT, RawMessage TEXT );''')
+    cursor.execute('''CREATE TABLE IF NOT EXISTS JOBS (id INT PRIMARY KEY auto_increment, PostDate Date, Title TEXT, Location TEXT, Description TEXT, Company TEXT, Apply_info TEXT, Salary FLOAT, RawMessage TEXT );''')
     return
 
 # Query the database.
@@ -29,11 +29,13 @@ def query_sql(cursor, query):
     return cursor
 
 # Add a new job
-def add_new_job(cursor, jobdetails):
+def add_new_job(cursor, job):
     ## Add your code here
-    query = "INSERT INTO JOBS (PostDate, Title, Location, Description, Company, Apply_info, Salary,RawMessage) values (%s,%s,%s,%s,$s,%s,%s,%s)"
-    data  =(jobdetails.created_at, jobdetails.title,jobdetails.location,jobdetails.description, jobdetails.Company, jobdetails.Apply_info, jobdetails.Salary,jobdetails)
-    return query_sql(cursor, query)
+    job = job[0]
+    data  = (job['created_at'], job['title'],job['location'],job['description'], job['company'], job['how_to_apply'], 'money',str(job))
+    query = 'INSERT INTO JOBS (id, PostDate, Title, Location, Description, Company, Apply_info, Salary, RawMessage)'
+    'values ("%s", "%s", "%s", "%s", "%s", "%s", "%s","%s") '
+    cursor.execute (query,data)
 
 # Check if new job
 def check_if_job_exists(cursor, jobdetails):
@@ -89,7 +91,7 @@ def load_config_file(filename):
 # Main area of the code.
 def jobhunt(arg_dict):
     # Fetch jobs from website
-    jobpage = fetch_new_jobs(arg_dict)
+    return fetch_new_jobs(arg_dict)
     # print (jobpage)
     ## Add your code here to parse the job page
 
